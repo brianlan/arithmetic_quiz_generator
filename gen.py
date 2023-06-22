@@ -112,7 +112,7 @@ def main(args):
     random.shuffle(generated_quizzes)
 
     args.output_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     with open(args.output_path, "w") as f:
         f.write("\n".join(generated_quizzes))
 
@@ -121,7 +121,9 @@ def main(args):
     with open(args.output_path.with_suffix(".html"), "w") as f:
         f.write(
             generate_quiz_sheet(
-                args.sheet_serial_number, args.sheet_date, generated_quizzes
+                args.sheet_serial_number,
+                args.sheet_date,
+                [q.split("=")[0] + "=" for q in generated_quizzes],
             )
         )
 
