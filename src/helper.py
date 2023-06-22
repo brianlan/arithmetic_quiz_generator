@@ -11,7 +11,7 @@ class NoValidExpressionFound(Exception):
 
 def get_day_of_week(sheet_date):
     # create a list of weekday names in Chinese (starting with Monday)
-    weekday_names = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    weekday_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
 
     # get the integer representation of the weekday (where Monday is 0 and Sunday is 6)
     weekday_int = sheet_date.weekday()
@@ -39,8 +39,8 @@ def generate_quiz_sheet(sheet_serial_number, sheet_date, quizzes):
         html string
     """
     template = Template(Path("templates/quiz_sheet.html").read_text())
-    first_half = quizzes[: len(quizzes) // 2 + 1]
-    second_half = quizzes[len(quizzes) // 2 + 1 :]
+    first_half = quizzes[: (len(quizzes) + 1) // 2]
+    second_half = quizzes[(len(quizzes) + 1) // 2 :]
     quizzes_reorg = itertools.zip_longest(
         range(1, len(first_half) + 1),
         first_half,
@@ -60,7 +60,7 @@ def generate_quiz_sheet(sheet_serial_number, sheet_date, quizzes):
 def default_output_path():
     dt = datetime.datetime.now().strftime("%Y-%m-%d")
     dtm = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")
-    return Path('generated_quiz') / dt / f"{dtm}.txt"
+    return Path("generated_quiz") / dt / f"{dtm}.txt"
 
 
 def to_printable(expr: str, max_operand_len: int = 3):

@@ -1,0 +1,54 @@
+{
+    "requirements": [
+        {
+            "num_quizzes": 20,
+            "parentheses": false,
+            "valid_operators": {
+                "+": {
+                    "probability": 0.25
+                },
+                "-": {
+                    "probability": 0.25
+                },
+                "*": {
+                    "probability": 0.25
+                },
+                "/": {
+                    "probability": 0.25
+                }
+            },
+            "operands": [
+                {
+                    "min_value": 3,
+                    "max_value": 120,
+                    "type": "int"
+                },
+                {
+                    "min_value": 3,
+                    "max_value": 120,
+                    "type": "int"
+                },
+                {
+                    "min_value": 3,
+                    "max_value": 120,
+                    "type": "int"
+                },
+                {
+                    "min_value": 3,
+                    "max_value": 120,
+                    "type": "int"
+                }
+            ],
+            "intermediate_result_range": {
+                "min_value": 3,
+                "max_value": 120,
+                "type": "int"
+            },
+            "final_result_range": {
+                "min_value": 3,
+                "max_value": 120,
+                "type": "int"
+            }
+        }
+    ]
+}

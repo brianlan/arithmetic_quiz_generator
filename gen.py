@@ -99,12 +99,16 @@ def main(args):
         num_of_operators = len(req["operands"]) - 1
         combinations = operator_combinations(req["valid_operators"], num_of_operators)
 
-        for operator_combination in combinations[: req["num_quizzes"]]:
+        successful_num = 0
+        while successful_num < req["num_quizzes"]:
+            operator_combination = random.choice(combinations)
             try:
                 quiz, num_tried = generate_quiz(req, operator_combination)
                 generated_quizzes.append(to_printable(quiz))
             except NoValidExpressionFound as e:
-                print(e)
+                logger.warning(e)
+            else:
+                successful_num += 1
         logger.info(
             f"Finished Generation of requirements {i}, {req['num_quizzes']} quizzes generated"
         )
