@@ -1,0 +1,28 @@
+<html>
+
+<body>
+    <table border="1" style="border-collapse: collapse; margin: 0 auto;">
+        <tr>
+            <td style="width: 28px; height: 24px; text-align: center;">{{sheet_serial_number}}</td>
+            <td style="width: 220px; height: 24px;">{{date}} &nbsp; &nbsp; &nbsp; {{dayofweek}}</td>
+            <td style="width: 28px; height: 24px; text-align: center;">&nbsp;</td>
+            <td style="width: 220px; height: 24px;">&nbsp;</td>
+        </tr>
+        {% for quiz_row in quizzes %}
+        <tr>
+            <td style="width: 28px; height: 24px; text-align: center;">&nbsp;</td>
+            <td style="width: 220px; height: 24px;">&nbsp;</td>
+            <td style="width: 28px; height: 24px; text-align: center;">&nbsp;</td>
+            <td style="width: 220px; height: 24px;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 28px; height: 24px; text-align: center;">{{quiz_row[0]}}</td>
+            <td style="width: 220px; height: 24px;">&nbsp;{{quiz_row[1]}}</td>
+            <td style="width: 28px; height: 24px; text-align: center;">{{quiz_row[2]}}</td>
+            <td style="width: 220px; height: 24px;">&nbsp;{{quiz_row[3]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
