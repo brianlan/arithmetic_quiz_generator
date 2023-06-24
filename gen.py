@@ -99,19 +99,19 @@ def main(args):
         num_of_operators = len(req["operands"]) - 1
         combinations = operator_combinations(req["valid_operators"], num_of_operators)
 
-        successful_num = 0
-        while successful_num < req["num_quizzes"]:
+        tmp_quizzes = set()
+        while len(tmp_quizzes) < req["num_quizzes"]:
             operator_combination = random.choice(combinations)
             try:
                 quiz, num_tried = generate_quiz(req, operator_combination)
-                generated_quizzes.append(to_printable(quiz))
+                tmp_quizzes.add(to_printable(quiz))
             except NoValidExpressionFound as e:
                 logger.warning(e)
-            else:
-                successful_num += 1
         logger.info(
             f"Finished Generation of requirements {i}, {req['num_quizzes']} quizzes generated"
         )
+
+        generated_quizzes.extend(tmp_quizzes)
 
     random.shuffle(generated_quizzes)
 
