@@ -24,12 +24,12 @@
                 }
             ],
             "intermediate_result_range": {
-                "min_value": 11,
+                "min_value": 25,
                 "max_value": 350,
                 "type": "int"
             },
             "final_result_range": {
-                "min_value": 11,
+                "min_value": 25,
                 "max_value": 350,
                 "type": "int"
             }
@@ -45,7 +45,7 @@
             "operands": [
                 {
                     "min_value": 5,
-                    "max_value": 200,
+                    "max_value": 40,
                     "type": "int"
                 },
                 {
@@ -55,12 +55,12 @@
                 }
             ],
             "intermediate_result_range": {
-                "min_value": 24,
+                "min_value": 48,
                 "max_value": 250,
                 "type": "int"
             },
             "final_result_range": {
-                "min_value": 24,
+                "min_value": 48,
                 "max_value": 250,
                 "type": "int"
             }

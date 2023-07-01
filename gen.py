@@ -1,4 +1,5 @@
 import argparse
+import datetime
 from pathlib import Path
 import json
 import random
@@ -11,14 +12,14 @@ from src.helper import (
     is_integer_or_no_fraction,
     default_output_path,
     to_printable,
-    generate_quiz_sheet,
+    generate_quiz_sheet_html_table,
 )
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--sheet-serial-number", type=int, required=True)
 parser.add_argument("--sheet-date", type=str, required=True)
-parser.add_argument("-c", "--config", type=Path, required=True)
-parser.add_argument("-o", "--output-path", type=Path, default=default_output_path())
+parser.add_argument("-c", "--configs", nargs="+", type=Path, required=True)
+# parser.add_argument("-o", "--output-path", type=Path, default=default_output_path())
 
 
 def generate_quiz(config, operator_combination, max_iterations=1e6):
@@ -90,10 +91,40 @@ def generate_quiz(config, operator_combination, max_iterations=1e6):
 
 def main(args):
     # Example usage
-    config_path = args.config
-    with open(config_path, "r") as file:
-        config = json.load(file)
+    logger.info(f"Number of quiz sets: {len(args.configs)}")
+    quiz_sets = []
+    for config_path in args.configs:
+        with open(config_path, "r") as file:
+            config = json.load(file)
+        quiz_sets.append(generate_quiz_set(config))
 
+    sheet_dates = [get_date_of_next_n_days(args.sheet_date, n=i) for i in range(len(quiz_sets))]
+    sheet_serial_numbers = [args.sheet_serial_number + i for i in range(len(quiz_sets))]
+    cur_time = f'{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}'
+
+    html_tables = []
+    answer_sheets = []
+    for quiz_set, sheet_date, sheet_serial_number in zip(quiz_sets, sheet_dates, sheet_serial_numbers):
+        # output quiz answer sheets
+        answer_sheet = "\n".join(quiz_set)
+        answer_sheets.append(answer_sheet)
+    
+        # output quiz html sheet for printing
+        html_table = generate_quiz_sheet_html_table(
+            sheet_serial_number,
+            sheet_date,
+            [q.split("=")[0] + "=" for q in quiz_set],
+        )
+        html_tables.append(html_table)
+    
+    full_answer_sheet = "\n-------------------------------------------------\n".join(answer_sheets)
+    output_quiz_answer_sheet(full_answer_sheet, Path('generated_quiz'), args.sheet_date, cur_time)
+
+    full_html = create_full_html_from_html_tables(html_tables)
+    output_quiz_html_sheet(full_html, Path('generated_quiz'), args.sheet_date, cur_time)
+
+
+def generate_quiz_set(config, shuffle=True):
     generated_quizzes = []
     for i, req in enumerate(config["requirements"]):
         num_of_operators = len(req["operands"]) - 1
@@ -113,23 +144,45 @@ def main(args):
 
         generated_quizzes.extend(tmp_quizzes)
 
-    random.shuffle(generated_quizzes)
+    if shuffle:
+        random.shuffle(generated_quizzes)
 
-    args.output_path.parent.mkdir(parents=True, exist_ok=True)
+    return generated_quizzes
 
-    with open(args.output_path, "w") as f:
-        f.write("\n".join(generated_quizzes))
 
-    # save html quiz sheet
-    # the save path is the same as the output path, but with a .html extension
-    with open(args.output_path.with_suffix(".html"), "w") as f:
-        f.write(
-            generate_quiz_sheet(
-                args.sheet_serial_number,
-                args.sheet_date,
-                [q.split("=")[0] + "=" for q in generated_quizzes],
-            )
-        )
+def output_quiz_answer_sheet(answer_sheet, out_dir: Path, sheet_date, cur_time):
+    output_path = out_dir / sheet_date / f'{cur_time}.txt'
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w") as f:
+        f.write(answer_sheet)
+
+
+def output_quiz_html_sheet(html, out_dir: Path, sheet_date, cur_time):
+    output_path = out_dir / sheet_date / f'{cur_time}.html'
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w") as f:
+        f.write(html)
+
+
+def get_date_of_next_n_days(cur_date, n=1):
+    return (datetime.datetime.strptime(cur_date, "%Y-%m-%d") + datetime.timedelta(days=n)).strftime("%Y-%m-%d")
+
+
+def create_full_html_from_html_tables(html_tables):
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+    </head>
+    <body>
+    """
+    for table in html_tables:
+        html += table + "<br>"
+    html += """
+    </body>
+    </html>
+    """
+    return html
 
 
 if __name__ == "__main__":

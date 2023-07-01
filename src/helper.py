@@ -22,7 +22,7 @@ def get_day_of_week(sheet_date):
     return weekday_name
 
 
-def generate_quiz_sheet(sheet_serial_number, sheet_date, quizzes):
+def generate_quiz_sheet_html_table(sheet_serial_number, sheet_date, quizzes):
     """Generate HTML quiz sheet using Jinja2 template
     Requirements:
     1. split quizzes into 2 columns (roughly equal size), the first half is on the left, the second half is on the right

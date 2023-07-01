@@ -1,0 +1,38 @@
+{
+    "requirements": [
+        {
+            "num_quizzes": 10,
+            "parentheses": false,
+            "valid_operators": {
+                "+": {
+                    "probability": 0.5
+                },
+                "-": {
+                    "probability": 0.5
+                }
+            },
+            "operands": [
+                {
+                    "min_value": 1000,
+                    "max_value": 9999,
+                    "type": "int"
+                },
+                {
+                    "min_value": 500,
+                    "max_value": 9999,
+                    "type": "int"
+                }
+            ],
+            "intermediate_result_range": {
+                "min_value": 200,
+                "max_value": 9999,
+                "type": "int"
+            },
+            "final_result_range": {
+                "min_value": 200,
+                "max_value": 9999,
+                "type": "int"
+            }
+        }
+    ]
+}
